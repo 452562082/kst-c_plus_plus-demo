@@ -1,0 +1,69 @@
+/// @brief 打开asv客户端
+/// @param ip IP地址
+/// @param port 端口
+void KvpServiceClient_Open(const char* ip, int port)
+
+/// @brief 关闭asv客户端
+void KvpServiceClient_close()
+
+/// @brief 向总库中插入某个库节点
+/// @param node_name 节点名称
+/// @return 0为成功，否则失败
+int32_t KvpInsertNode(const char* node_name)
+
+/// @brief 从总库中删除某个库节点
+/// @param node_name 节点名称
+/// @return 0为成功，否则失败
+int32_t KvpDeleteNode(const char* node_name)
+
+/// @brief 注册说话人(二进制流格式)
+/// @param [in] utt 语音流。
+/// @param [in] vp_node 说话人待注册库节点名称。
+/// @param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
+/// @param [in] spk_id 说话人ID。(如果存在返回错误码102)
+/// @return Rpc_ModelInfo 说话人模型信息
+_Rpc_ModelInfo* KvpRegisterSpeakerByStream(int16_t* utt, int utt_size, const char* vp_node, const char* vp_dir, const char* spk_id)
+
+/// @brief 删除_Rpc_ModelInfo指针
+/// @param ptr _Rpc_ModelInfo指针
+void Delete_Rpc_ModelInfo(_Rpc_ModelInfo *ptr)
+
+/// @brief 说话人辨认(二进制流格式)
+/// @param [in] utt 语音流。
+/// @param [in] node_list 库节点列表。
+/// @param [in] node_num 库节点数目。
+/// @param [in] top_n Top n数目。
+/// @param [in] utt_type 语音场景类型。
+/// @return Rpc_TopSpeakerInfo Top n得分信息
+_Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type)
+
+/// @brief 删除_Rpc_TopSpeakerInfo指针
+/// @param _Rpc_TopSpeakerInfo指针
+void Delete_Rpc_TopSpeakerInfo(_Rpc_TopSpeakerInfo *ptr)
+
+/// @brief 将某说话人ID从某个库节点中删除。
+/// @param [in] vp_node 库节点名称。
+/// @param [in] vp_dir 库节点本地路径。
+/// @param [in] spk_id 说话人ID。
+/// @return 0为成功，否则失败
+int32_t KvpModelRemoveBySpkid(const char* vp_node, const char* vp_dir, const char* spk_id)
+
+/// @brief 获取机器指纹
+/// @return 机器指纹
+const char* KvpGetFingerprint()
+
+/// @brief 获取授权状态
+/// @return 授权状态
+bool KvpIsLicenceValid()
+
+/// @brief 获取授权信息
+/// @return 授权信息
+_Rpc_LicenceInfo* KvpGetLicenceInfo()
+
+/// @brief 删除_Rpc_LicenceInfo指针
+/// @param ptr _Rpc_LicenceInfo指针
+void Delete_Rpc_LicenceInfo(_Rpc_LicenceInfo *ptr)
+
+/// @brief 动态设置授权码
+/// @param licence 授权码
+int32_t KvpSetLicence(const char* licence)

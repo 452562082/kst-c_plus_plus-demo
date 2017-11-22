@@ -79,6 +79,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="test_rpc.h" />
+    <ClInclude Include="waveIO.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="asv_rpc_demo.cpp" />

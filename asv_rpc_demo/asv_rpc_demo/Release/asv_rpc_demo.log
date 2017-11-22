@@ -1,5 +1,5 @@
-﻿生成启动时间为 2017/10/31 14:33:48。
-     1>项目“C:\Users\Yu\Desktop\asv_rpc\asv_rpc_demo\asv_rpc_demo\asv_rpc_demo.vcxproj”在节点 2 上(build 个目标)。
+﻿生成启动时间为 2017/11/21 17:10:33。
+     1>项目“D:\GitPro\asv_rpc\asv_rpc_demo\asv_rpc_demo\asv_rpc_demo.vcxproj”在节点 2 上(build 个目标)。
      1>InitializeBuildStatus:
          正在创建“Release\asv_rpc_demo.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
        ClCompile:
@@ -7,11 +7,11 @@
          所有输出均为最新。
        Link:
          所有输出均为最新。
-         asv_rpc_demo.vcxproj -> C:\Users\Yu\Desktop\asv_rpc\asv_rpc_demo\Release\asv_rpc_demo.exe
+         asv_rpc_demo.vcxproj -> D:\GitPro\asv_rpc\asv_rpc_demo\Release\asv_rpc_demo.exe
        FinalizeBuildStatus:
          正在删除文件“Release\asv_rpc_demo.unsuccessfulbuild”。
          正在对“Release\asv_rpc_demo.lastbuildstate”执行 Touch 任务。
-     1>已完成生成项目“C:\Users\Yu\Desktop\asv_rpc\asv_rpc_demo\asv_rpc_demo\asv_rpc_demo.vcxproj”(build 个目标)的操作。
+     1>已完成生成项目“D:\GitPro\asv_rpc\asv_rpc_demo\asv_rpc_demo\asv_rpc_demo.vcxproj”(build 个目标)的操作。
 
 生成成功。
 

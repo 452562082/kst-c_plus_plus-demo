@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include "test_rpc.h"
+#include "waveIO.h"
 
 bool KvpServiceClient_Open(HINSTANCE dll_handle,const char* ip,int port);
 bool KvpServiceClient_close(HINSTANCE dll_handle);
@@ -14,6 +15,7 @@ bool KvpRegisterSpeakerByStream(HINSTANCE dll_handle, _Rpc_ModelInfo* &ret, int1
 void Delete_Rpc_ModelInfo(HINSTANCE dll_handle, _Rpc_ModelInfo* ptr);
 bool KvpIdentifyTopSpeakerByStream(HINSTANCE dll_handle, _Rpc_TopSpeakerInfo* &ret, int16_t* utt, int utt_size, const char** vp_node_arr, int vp_node_arr_size, int node_num, int top_n, int utt_type);
 void Delete_Rpc_TopSpeakerInfo(HINSTANCE dll_handle, _Rpc_TopSpeakerInfo* ptr);
+bool KvpModelRemoveBySpkid(HINSTANCE dll_handle,const char* vp_node, const char* vp_dir, const char* spk_id);
 bool KvpGetLicenceInfo(HINSTANCE dll_handle, _Rpc_LicenceInfo* &ret);
 void Delete_Rpc_LicenceInfo(HINSTANCE dll_handle, _Rpc_LicenceInfo* ptr);
 
@@ -26,7 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	//IP端口请向技术产商索要
-	if(!KvpServiceClient_Open(dll_handle,"127.0.0.1",9191)){
+	if(!KvpServiceClient_Open(dll_handle,"47.104.11.15",9191)){
 		return -1;
 	}
 
@@ -36,13 +38,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	//说话人注册
-	const int utt_size = 800000;
-	short *utt = new short[utt_size];
-	for (int i=1; i<utt_size; i++) {
-		utt[i] = (short)i;
+	const char* filename = "./gabzh.wav";
+	short *utt = nullptr;
+	unsigned long utt_size = 0;
+	if(!WaveLoad(filename,utt,utt_size)){
+		std::cout << "语音文件格式错误" << std::endl;
+		return -1;
 	}
+
 	_Rpc_ModelInfo* _mdlinfo = nullptr;
-	KvpRegisterSpeakerByStream(dll_handle, _mdlinfo, utt, utt_size, "testnode", "/tmp/asv", "djsayrwq2ry7dehswjd7");
+	KvpRegisterSpeakerByStream(dll_handle, _mdlinfo, utt, utt_size, "testnode", "/tmp/asv", "djsayrwq2ry7dehswjd8");
 	if (_mdlinfo->RetCode != 0){
 		std::cout << "Failed: " << _mdlinfo->ErrCode << "\t" << _mdlinfo->ErrMsg << std::endl;
 	}
@@ -54,9 +59,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	KvpIdentifyTopSpeakerByStream(dll_handle,rt, utt, utt_size, &vp_node, 1,1, 1, 0);
 	if(rt->RetCode != 0){
 		std::cout << "Failed: " << rt->ErrCode << "\t" << rt->ErrMsg << std::endl;
+	}else{
+		for(int i = 0;i < rt->Scores_size;++i){
+			std::cout << "Spkid:" << rt->Scores[i]->Spkid << " Scores:" << rt->Scores[i]->Score << std::endl; 
+		}
 	}
 	Delete_Rpc_TopSpeakerInfo(dll_handle, rt);
 	delete[] utt;
+
+	//删除说话人
+	KvpModelRemoveBySpkid(dll_handle,"testnode", "/tmp/asv", "djsayrwq2ry7dehswjd8");
 
 	//获取授权信息
 	_Rpc_LicenceInfo* ret = nullptr;
@@ -234,6 +246,34 @@ void Delete_Rpc_TopSpeakerInfo(HINSTANCE dll_handle, _Rpc_TopSpeakerInfo* ptr)
     }catch(std::exception ex)
     {
 		std::cout << ex.what() << std::endl;
+    }
+}
+
+bool KvpModelRemoveBySpkid(HINSTANCE dll_handle,const char* vp_node, const char* vp_dir, const char* spk_id)
+{
+	try{
+        if(dll_handle == nullptr) {
+            return false;
+        }
+
+        typedef int32_t (*KvpModelRemoveBySpkid)(const char* vp_node, const char* vp_dir, const char* spk_id);
+        KvpModelRemoveBySpkid KvpModelRemoveBySpkidFunc = (KvpModelRemoveBySpkid)GetProcAddress(dll_handle, "KvpModelRemoveBySpkid");
+        if(!KvpModelRemoveBySpkidFunc){
+            std::cout << "KvpModelRemoveBySpkid func can't be found." << std::endl;
+            return false;
+        }
+        int32_t ret = KvpModelRemoveBySpkidFunc(vp_node,vp_dir,spk_id);
+		if(ret == 0){
+			std::cout << "KvpModelRemoveBySpkid success." << std::endl;
+			return true;
+		}else{
+			std::cout << "KvpModelRemoveBySpkid failed, code is " << ret << std::endl;
+			return false;
+		}
+    }catch(std::exception ex)
+    {
+		std::cout << ex.what() << std::endl;
+		return false;
     }
 }
 

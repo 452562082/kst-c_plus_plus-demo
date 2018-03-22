@@ -27,10 +27,10 @@
     <ClInclude Include="waveIO.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="asv_rpc.h">
+    <ClInclude Include="test_rpc.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="test_rpc.h">
+    <ClInclude Include="asv_rpc.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

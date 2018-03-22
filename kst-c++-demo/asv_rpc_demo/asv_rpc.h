@@ -26,19 +26,17 @@ public:
 
 	/// @brief 将某说话人ID从某个库节点中删除
 	/// @param[in] vp_node 库节点名称
-	/// @param[in] vp_dir 库节点本地路径
 	/// @param[in] spk_id 说话人ID
 	/// @return KVP_CODE
-	int32_t KvpModelRemoveBySpkid(const string& vp_node, const string& vp_dir, const string& spk_id);
+	int32_t KvpModelRemoveBySpkid(const string& vp_node, const string& spk_id);
 
 	/// @brief 注册说话人
 	/// @param[in] utt 语音路径
 	/// @param[in] vp_node 说话人待注册库节点名称
-	/// @param[in] vp_dir 声纹库路径
 	/// @param[in] spk_id 说话人ID
 	/// @param[in] sp_chan 指定处理声道
 	/// @return _Rpc_ModelInfo 返回说话人模型信息
-	_Rpc_ModelInfo* KvpRegisterSpeakerByFile(const string& utt, const string& vp_node, const string& vp_dir, const string& spk_id, int32_t sp_chan);
+	_Rpc_ModelInfo* KvpRegisterSpeakerByFile(const string& utt, const string& vp_node, const string& spk_id, int32_t sp_chan);
 
 	/// @brief 1:1验证
 	/// @param[in] utt 语音路径
@@ -106,10 +104,9 @@ public:
 	/// @brief 注册说话人(二进制流格式)
 	/// @param [in] utt 语音流。
 	/// @param [in] vp_node 说话人待注册库节点名称。
-	/// @param [in] vp_dir 声纹库路径。(--------该参数被废弃--------)
 	/// @param [in] spk_id 说话人ID。(如果存在返回错误码102)
 	/// @return _Rpc_ModelInfo 说话人模型信息
-	_Rpc_ModelInfo* KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const string& vp_node, const string& vp_dir, const string& spk_id);
+	_Rpc_ModelInfo* KvpRegisterSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const string& vp_node, const string& spk_id);
 
 	/// @brief 说话人辨认(二进制流格式)
 	/// @param [in] utt 语音流。
@@ -118,8 +115,17 @@ public:
 	/// @param [in] top_n Top n数目。
 	/// @param [in] utt_type 语音场景类型。
 	/// @return _Rpc_TopSpeakerInfo Top n得分信息
-	_Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(const std::vector<int16_t>& utt, const std::vector<std::string>& node_list, int node_num, int top_n, int utt_type);
-	
+	_Rpc_TopSpeakerInfo* KvpIdentifyTopSpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const std::vector<std::string>& node_list, int node_num, int top_n, int utt_type);
+
+	/// 说话人确认（二进制流格式）。
+	/// @param [in] utt 语音流。
+	/// @param [in] samp_rate 语音数据采样率。
+	/// @param [in] spk_id 说话人ID。
+	/// @param [in] vp_node 库节点。
+	/// @param [in] utt_type 语音场景类型。
+	/// @return Rpc_ScoreInfo 得分信息 
+	_Rpc_ScoreInfo* KvpVerifySpeakerByStream(const std::vector<int16_t>& utt, const int32_t samp_rate, const std::string& spk_id, const std::string& vp_node, const int32_t utt_type);
+
 	/// @brief 1:1验证(给定2段语音进行比较，二进制流格式)
 	/// @param[in] utt1 第1段语音流
 	/// @param[in] sp_chan1 指定第1段语音声道
@@ -128,7 +134,7 @@ public:
 	/// @param[in] sp_chan2 指定第2段语音声道
 	/// @param[in] utt_type2 指定第2段语音场景类型
 	/// @return _Rpc_ScoreInfo 验证得分信息
-	_Rpc_ScoreInfo* KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, int32_t sp_chan1, int32_t utt_type1, std::vector<int16_t> utt2, int32_t sp_chan2, int32_t utt_type2);
+	_Rpc_ScoreInfo* KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, const int32_t samp_rate_1, int32_t utt_type1, std::vector<int16_t> utt2, const int32_t samp_rate_2, int32_t utt_type2);
  
 	/// @brief 删除模块内部数据结构
 	/// @param[in] _Asv_Type 数据结构类型

@@ -28,7 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	for(int i = 0;i < utt_size;i++) {
 		utt_arr.push_back(utt[i]);
 	}
-	_Rpc_ModelInfo* _mdlinfo= engine.KvpRegisterSpeakerByStream(utt_arr, 16000, "testnode", "djsayrwq2ry7dehswjd8");
+	_Rpc_ModelInfo* _mdlinfo= engine.KvpRegisterSpeakerByStream(utt_arr, 22050, "testnode", "djsayrwq2ry7dehswjd8");
 	if (_mdlinfo->RetCode != 0){
 		std::cout << "Failed: " << _mdlinfo->ErrCode << "\t" << _mdlinfo->ErrMsg << std::endl;
 	}
@@ -37,7 +37,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//说话人识别
 	vector<string> vp_node_arr;
 	vp_node_arr.push_back("testnode");
-	_Rpc_TopSpeakerInfo *rt = engine.KvpIdentifyTopSpeakerByStream(utt_arr, 16000, vp_node_arr, 1, 1, 0);
+	_Rpc_TopSpeakerInfo *rt = engine.KvpIdentifyTopSpeakerByStream(utt_arr, 22050, vp_node_arr, 1, 1, 0);
 	if(rt->RetCode != 0){
 		std::cout << "Failed: " << rt->ErrCode << "\t" << rt->ErrMsg << std::endl;
 	}else{

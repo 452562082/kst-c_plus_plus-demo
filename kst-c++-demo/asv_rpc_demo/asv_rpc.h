@@ -17,7 +17,7 @@ public:
 	/// @param[in] ip IP地址
 	/// @param[in] port 端口号
 	/// @param[in] interval 心跳检测时间间隔(ms)
-	AsvRpcEngine(const char* ip, int port, int interval);
+	AsvRpcEngine(const std::string& ip, int port, int interval);
 	~AsvRpcEngine();
 	/// @brief 解析语音文件信息
 	/// @param[in] wavpath 语音文件路径
@@ -25,8 +25,9 @@ public:
 	_Rpc_UttInfo* KvpGetUttInfo(const string& wav_path);
 
 	/// @brief 将某说话人ID从某个库节点中删除
-	/// @param[in] vp_node 库节点名称
-	/// @param[in] spk_id 说话人ID
+	/// @param [in] vp_node 库节点名称
+	/// @param [in] vp_dir 库节点本地路径
+	/// @param [in] spk_id 说话人ID
 	/// @return KVP_CODE
 	int32_t KvpModelRemoveBySpkid(const string& vp_node, const string& spk_id);
 
@@ -83,12 +84,19 @@ public:
 	/// @return KVP_CODE
 	int32_t KvpDeleteNode(const string& vp_node);
 
+	/// @brief 将说话人模型从一个库移到另一个库。
+    /// @param spk_id 说话人ID。
+    /// @param origin 原始库。
+    /// @param target 目标库。
+    /// @return KVP_CODE
+	int32_t KvpMoveNode(const string& spk_id, const string& origin, const string& target);
+
 	/// @brief 获取机器指纹
 	/// @return 机器人指纹字符串
 	string KvpGetFingerprint();
 
 	/// @brief 获取授权信息
-	/// @return _Rpc_LicenceInfo
+	/// @return _Rpc_LicenceInfo 授权信息
 	_Rpc_LicenceInfo* KvpGetLicenceInfo();
 
 	/// @brief 设置授权信息
@@ -103,6 +111,7 @@ public:
 
 	/// @brief 注册说话人(二进制流格式)
 	/// @param [in] utt 语音流。
+	/// @param [in] samp_rate 语音数据采样率
 	/// @param [in] vp_node 说话人待注册库节点名称。
 	/// @param [in] spk_id 说话人ID。(如果存在返回错误码102)
 	/// @return _Rpc_ModelInfo 说话人模型信息
@@ -110,6 +119,7 @@ public:
 
 	/// @brief 说话人辨认(二进制流格式)
 	/// @param [in] utt 语音流。
+	/// @param [in] samp_rate 语音数据采样率。
 	/// @param [in] node_list 库节点列表。
 	/// @param [in] node_num 库节点数目。
 	/// @param [in] top_n Top n数目。
@@ -128,10 +138,10 @@ public:
 
 	/// @brief 1:1验证(给定2段语音进行比较，二进制流格式)
 	/// @param[in] utt1 第1段语音流
-	/// @param[in] sp_chan1 指定第1段语音声道
+	/// @param[in] utt1 samp_rate_1 语音数据采样率
 	/// @param[in] utt_type1 指定第1段语音场景类型
 	/// @param[in] utt2 第2段语音流
-	/// @param[in] sp_chan2 指定第2段语音声道
+	/// @param [in] utt2 samp_rate_2 语音数据采样率
 	/// @param[in] utt_type2 指定第2段语音场景类型
 	/// @return _Rpc_ScoreInfo 验证得分信息
 	_Rpc_ScoreInfo* KvpTempVerifySpeakerByStream(const std::vector<int16_t>& utt1, const int32_t samp_rate_1, int32_t utt_type1, std::vector<int16_t> utt2, const int32_t samp_rate_2, int32_t utt_type2);
@@ -171,6 +181,7 @@ private:
 	void* m_client_ptr;
 	bool m_isConnect;
 	HANDLE m_mutex;
+	HANDLE m_run_thread;
 };
 
 class ClientNilException : public std::exception

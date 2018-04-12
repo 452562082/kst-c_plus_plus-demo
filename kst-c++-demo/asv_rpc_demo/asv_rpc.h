@@ -166,8 +166,6 @@ public:
 	bool IsConnect();
 	//ÖØÁ¬
 	void reset();
-	//ÐÄÌø¼ì²â
-	string KvpPing();
 private:
 	void connect();
 	void close();

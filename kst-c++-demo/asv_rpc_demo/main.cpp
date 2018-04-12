@@ -11,7 +11,7 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 	try{
-		AsvRpcEngine engine("47.104.11.15",9191,1000);
+		AsvRpcEngine engine("192.168.1.16",9999,1000);
 		//Ìí¼Ó½Úµã
 		if(engine.KvpInsertNode("testnode")){
 			return -1;
